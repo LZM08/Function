@@ -1,12 +1,11 @@
 from flask import Flask
 import random
 app = Flask(__name__)
-
-
 topics = [
     {'id':1, 'title':'html', 'body':'html is...'},
     {'id':2, 'title':'css', 'body':'css is...'},
-    {'id':3, 'title':'javascruot', 'body':'javascript is...'}
+    {'id':3, 'title':'javascruot', 'body':'javascript is...'},
+    {'id':435353, 'title':'jfdsfsdavascruot', 'body':'javascrsfsfipt is...'}
     
 ]
 
@@ -20,12 +19,13 @@ def template(contents, content):
             {contents}
         </ol>
         {content}
+        <ul>
+            <li><a href="/create/">create</a></li>
+        </ul>
         hello, web
     </body>
 </html>
 '''
-
-
 def getContents():
     liTags = ''
     for topic in topics:
@@ -42,7 +42,15 @@ def index():
 
 @app.route('/create/')
 def create():
-    return 'Create'
+    content ='''
+        <form action="/a/">
+            <p><input type="text" name = "title" placeholder="title"></p>
+            <p><textarea name="body" placeholder="body"></textarea></p>
+            <p><input type="submit" value="create"></p>
+        </form>
+    
+    '''
+    return template(getContents(),content)
 
 
 
