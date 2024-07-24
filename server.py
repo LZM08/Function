@@ -1,11 +1,15 @@
 from flask import Flask
+from flask import request
+from flask import redirect
 import random
 app = Flask(__name__)
+
+
+nextID =4
 topics = [
     {'id':1, 'title':'html', 'body':'html is...'},
     {'id':2, 'title':'css', 'body':'css is...'},
-    {'id':3, 'title':'javascruot', 'body':'javascript is...'},
-    {'id':435353, 'title':'jfdsfsdavascruot', 'body':'javascrsfsfipt is...'}
+    {'id':3, 'title':'javascruot', 'body':'javascript is...'}
     
 ]
 
@@ -40,17 +44,28 @@ def index():
     return template(getContents(), '<h2>Welcome</h2>Hello, WEB')
 
 
-@app.route('/create/')
+@app.route('/create/', methods = ['GET','POST'])
 def create():
-    content ='''
-        <form action="/a/">
-            <p><input type="text" name = "title" placeholder="title"></p>
-            <p><textarea name="body" placeholder="body"></textarea></p>
-            <p><input type="submit" value="create"></p>
-        </form>
-    
-    '''
-    return template(getContents(),content)
+    print(request.method)
+    if request.method =='GET':
+        content ='''
+            <form action="/create/" method="post">
+                <p><input type="text" name = "title" placeholder="title"></p>
+                <p><textarea name="body" placeholder="body"></textarea></p>
+                <p><input type="submit" value="create"></p>
+            </form>
+        '''
+        return template(getContents(),content)
+    elif request.method =='POST':
+        global nextID
+        title = request.form['title']
+        body = request.form['body']
+        newTopic = {'id': nextID,'title':title,'body':body}
+        topics.append(newTopic)
+        url = '/read/'+str(nextID) +'/'
+        nextID = nextID + 1
+        
+        return redirect(url)
 
 
 
