@@ -16,6 +16,7 @@ def template(contents, content, id=None):
     if id is not None:
         contextUI = f'''
             <li><a href="/update/{id}/">update</a></li>
+            <li><form action="/delete/{id}" method="POST"><input type="submit" value="delete"></form></li>
         '''
     return f'''
 <!doctype html>
@@ -107,5 +108,16 @@ def read(id):
             body = topic['body']
             break
     return template(getContents(), f'<h2>{title}</h2>{body}', id)
+
+@app.route('/delete/<int:id>/', methods=['POST'])
+def delete(id):
+    for topic in topics:
+        if id == topic['id']:
+            topics.remove(topic)
+            break
+    return redirect('/')
+            
+    
+
 
 app.run(port=5001, debug=True)
